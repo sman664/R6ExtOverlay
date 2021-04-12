@@ -25,7 +25,7 @@ const float EYE_HEIGHT = 4.5f;
 //const float EYE_HEIGHT = 4.0f;
 
 const float VIRTUAL_SCREEN_WIDTH = 1280; //this is the screen width you develop/test your hack with, I use same for every game
-const float GAME_UNIT_MAGIC = 350; //magic scaling number you adjust so the boxes fit the players in your game
+const float GAME_UNIT_MAGIC = 200; //magic scaling number you adjust so the boxes fit the players in your game
 const float PLAYER_ASPECT_RATIO = PLAYER_HEIGHT / PLAYER_WIDTH;
 
 
@@ -43,7 +43,7 @@ private:
 	HWND TargetHWND;
 	int width1, height1;
 	uintptr_t entlist = 0;
-	int numOfPlayersDeref = 30;
+	int numOfPlayersDeref = 60;
 	uintptr_t moduleBase = 0;
 	
 
