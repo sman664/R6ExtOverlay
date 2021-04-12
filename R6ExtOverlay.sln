@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "R6ExtOverlay", "R6ExtOverlay\R6ExtOverlay.vcxproj", "{065D3677-C022-4459-BC16-8C92C668B80C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Debug|x64.ActiveCfg = Debug|x64
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Debug|x64.Build.0 = Debug|x64
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Debug|x86.ActiveCfg = Debug|Win32
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Debug|x86.Build.0 = Debug|Win32
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Release|x64.ActiveCfg = Release|x64
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Release|x64.Build.0 = Release|x64
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Release|x86.ActiveCfg = Release|Win32
+		{065D3677-C022-4459-BC16-8C92C668B80C}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84D38E2B-50F9-4957-AB53-66B6E4C6B8C3}
+	EndGlobalSection
+EndGlobal
