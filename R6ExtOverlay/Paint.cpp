@@ -5,6 +5,8 @@ Paint::Paint() {}
 
 Paint::Paint(HANDLE hProc, uintptr_t moduleBase, HWND overlayHWND, HWND targetHWND, int width, int height)
 {
+	offsets = Offsets(hProc, moduleBase, width, height);
+
 	this->width1 = width;
 	this->height1 = height;
 	this->TargetHWND = targetHWND;
@@ -12,7 +14,7 @@ Paint::Paint(HANDLE hProc, uintptr_t moduleBase, HWND overlayHWND, HWND targetHW
 	this->moduleBase = moduleBase;
 	init(overlayHWND);
 
-	this->entlist = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x60 });
+	//this->entlist = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x60 });
 	//05EF12F8
 	//this->entlist = moduleBase + 0x6ACEAB0;
 	//uintptr_t entityBasePtr = moduleBase + 0x6ACEAB0;
@@ -51,7 +53,7 @@ void Paint::drawText(char* string, int x, int y, int a, int r, int g, int b)
 	RECT rect;
 	rect.top = y;
 	rect.left = x;
-	font->DrawTextA(0, string, strlen(string), &rect, DT_NOCLIP, D3DCOLOR_ARGB(a, r, g, b));
+	font->DrawTextA(0, string, (INT)(strlen(string)), &rect, DT_NOCLIP, D3DCOLOR_ARGB(a, r, g, b));
 }
 
 int Paint::render()
@@ -101,11 +103,11 @@ void Paint::Draw(HANDLE hProc)
 
 	//starting from entlist offset 0x50f4f8 (or moduleBase + 10f4f8) check if entity exists then draw his/her rectangle
 	//check out ESP.cpp file in assaultcube external application I made.
-	for (int i = 0; i < numOfPlayersDeref; i++)
+	for (int i = 0; i < offsets.numOfPlayersDeref; i++)
 	{
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
 		//ReadProcessMemory(hProc, (BYTE*)myEntlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		currEntPtr = entlist;
+		currEntPtr = offsets.entlist;
 		for (int j = 0; j < i; j++)
 		{
 			currEntPtr += 0x8;																	//offset between each entity

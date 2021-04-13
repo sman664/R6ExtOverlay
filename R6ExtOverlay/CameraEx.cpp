@@ -2,8 +2,10 @@
 #include "CameraEx.h"
 
 //these offsets change with each game. (See CameraEx.h as well)
-CameraEx::CameraEx(HANDLE hProc, uintptr_t moduleBase, float windowWidth, float windowHeight)
+CameraEx::CameraEx(HANDLE hProc, uintptr_t moduleBase, int windowWidth, int windowHeight)
 {
+	offsets = Offsets(hProc, moduleBase, windowWidth, windowHeight);
+
 	this->windowWidth = windowWidth;
 	this->windowHeight = windowHeight;
 	//windowWidth = 1920;
@@ -14,7 +16,7 @@ CameraEx::CameraEx(HANDLE hProc, uintptr_t moduleBase, float windowWidth, float 
 	this->hProc = hProc;
 	this->moduleBase = moduleBase;
 	this->matrixStart = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x918, 0xCC8, 0x140 });            // also try 0x13C or 0x140
-	this->localPlayerDeref = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x918, 0xCC8, 0x0 });
+	//this->localPlayerDeref = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x918, 0xCC8, 0x0 });
 
 	float value;
 	uintptr_t floatAddr;
@@ -90,15 +92,17 @@ vec3 CameraEx::WorldToScreen(vec3 pos)
 	//start by finding local player's address and getting our position...
 	//ReadProcessMemory(hProc, (BYTE*)localPlayer, &(localPlayerDeref), sizeof(localPlayerDeref), 0);
 
-	uintptr_t currHeadPosXPtr = localPlayerDeref + 0x120;
-	uintptr_t currHeadPosYPtr = localPlayerDeref + 0x124;
-	uintptr_t currHeadPosZPtr = localPlayerDeref + 0x128;
+	//uintptr_t currHeadPosXPtr = localPlayerDeref + 0x120;
+	//uintptr_t currHeadPosYPtr = localPlayerDeref + 0x124;
+	//uintptr_t currHeadPosZPtr = localPlayerDeref + 0x128;
+	// 
+	//vec3 locPlayerPos = vec3();
+	// 
+	//ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(locPlayerPos.x), sizeof(locPlayerPos.x), 0);
+	//ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(locPlayerPos.y), sizeof(locPlayerPos.y), 0);
+	//ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(locPlayerPos.z), sizeof(locPlayerPos.z), 0);
 
-	vec3 locPlayerPos = vec3();
-
-	ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(locPlayerPos.x), sizeof(locPlayerPos.x), 0);
-	ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(locPlayerPos.y), sizeof(locPlayerPos.y), 0);
-	ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(locPlayerPos.z), sizeof(locPlayerPos.z), 0);
+	vec3 locPlayerPos = offsets.GetLocalPlayerPos();
 
 	//then by getting the enemy entity's position which is passed as vec3 already
 	//Then calculate distance from us and enemy and store in our vec3

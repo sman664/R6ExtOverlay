@@ -143,10 +143,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Aimbot.h" />
     <ClInclude Include="CameraEx.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="geom.h" />
     <ClInclude Include="mem.h" />
+    <ClInclude Include="Offsets.h" />
     <ClInclude Include="Paint.h" />
     <ClInclude Include="proc.h" />
     <ClInclude Include="R6ExtOverlay.h" />
@@ -154,8 +156,10 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Aimbot.cpp" />
     <ClCompile Include="CameraEx.cpp" />
     <ClCompile Include="mem.cpp" />
+    <ClCompile Include="Offsets.cpp" />
     <ClCompile Include="Paint.cpp" />
     <ClCompile Include="proc.cpp" />
     <ClCompile Include="R6ExtOverlay.cpp" />

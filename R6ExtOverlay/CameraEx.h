@@ -4,6 +4,7 @@
 #include "geom.h"
 #include "proc.h"
 #include <d3dx9math.h>
+#include "Offsets.h"
 
 
 //find the camera and the resolution ptr path and store here before compile time
@@ -19,17 +20,18 @@
 class CameraEx
 {
 public:
-	float windowWidth = 0, windowHeight = 0;
+	int windowWidth = 0, windowHeight = 0;
 	float matrix[29];
 	float fovx = 0;
 	float fovy = 0;
+	Offsets offsets;
 
 	uintptr_t moduleBase = 0;
 	uintptr_t matrixStart = 0;
-	uintptr_t localPlayerDeref = 0;
+	//uintptr_t localPlayerDeref = 0;
 	HANDLE hProc = 0;
 
-	CameraEx(HANDLE hProc, uintptr_t moduleBase, float windowWidth, float windowHeight);
+	CameraEx(HANDLE hProc, uintptr_t moduleBase, int windowWidth, int windowHeight);
 
 	vec3 WorldToScreen(vec3 pos);
 };

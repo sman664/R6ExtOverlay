@@ -2,6 +2,7 @@
 
 #include <string> //save error
 #include <Windows.h>
+#include "Offsets.h"
 
 //#include "D3D9Helper.h"
 #include "geom.h"
@@ -42,10 +43,11 @@ private:
 	ID3DXLine* line = nullptr;
 	HWND TargetHWND;
 	int width1, height1;
-	uintptr_t entlist = 0;
-	int numOfPlayersDeref = 60;
+	//uintptr_t entlist = 0;
+	//int numOfPlayersDeref = 60;
 	uintptr_t moduleBase = 0;
 	
+	Offsets offsets;
 
 	HANDLE hProc = 0;
 

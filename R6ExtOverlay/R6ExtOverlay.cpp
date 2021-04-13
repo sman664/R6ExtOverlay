@@ -13,6 +13,7 @@
 #include "mem.h"
 #include "CameraEx.h"
 #include "geom.h"
+#include "Aimbot.h"
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
@@ -86,6 +87,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
     paint = Paint(hProcess, moduleBase, overlayHWND, targetHWND, width, height);
+    bool aimbotBool = false;
     MSG msg;
 
     // Main message loop:
@@ -93,6 +95,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
+
+        if (GetAsyncKeyState(VK_XBUTTON2) & 1)
+        {
+            aimbotBool = !aimbotBool;
+
+        }
+        if (aimbotBool)
+        {
+            Aimbot aimbot = Aimbot(hProcess, moduleBase, width, height);
+            aimbot.AimAt();
+        }
+
 
         RECT rect;
         GetWindowRect(targetHWND, &rect);
