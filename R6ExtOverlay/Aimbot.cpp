@@ -110,6 +110,9 @@ vec3 Aimbot::GetBestEntity()
 
 		//find the distance from my crosshair to the target
 		float distRelCross = crossPos.Distance(screenPos);
+		//float screenX = screenPos.x - crossPos.x;
+		//float screenY = screenPos.y - crossPos.y;
+		//float distRelCross = sqrtf(screenX * screenX + screenY * screenY);
 
 		if (i == 0 || distRelCross < leastDist)
 		{
@@ -207,7 +210,7 @@ void Aimbot::AimAt()
 
 	//get center mass of player/entity (relative to feet position)
 	//target.z = target.z + 0.80f;
-	target.z = target.z + 1.60f;
+	//target.z = target.z + 1.60f;
 
 	vec3 point = cameraEx.WorldToScreen(target);
 
