@@ -6,26 +6,27 @@ CameraEx::CameraEx(HANDLE hProc, uintptr_t moduleBase, int windowWidth, int wind
 {
 	offsets = Offsets(hProc, moduleBase, windowWidth, windowHeight);
 
-	this->windowWidth = windowWidth;
-	this->windowHeight = windowHeight;
-	this->hProc = hProc;
-	this->moduleBase = moduleBase;
-	this->matrixStart = offsets.matrixStart;
+	this->windowWidth		=	windowWidth;
+	this->windowHeight		=	windowHeight;
+	this->hProc				=	hProc;
+	this->moduleBase		=	moduleBase;
+	this->matrixStart		=	offsets.matrixStart;
 
+	//stuff to help build view matrix array
 	float value;
 	uintptr_t floatAddr;
-	uintptr_t currMatrixIndex = 0;
+	uintptr_t spaceFromStart = 0;
 
 	//initialize the view matrix array... usually 16 float values all right next to each other in memory;
 	for (int m = 0; m < 16; m++)
 	{
 		value = 0;
 		floatAddr = 0;
-		floatAddr = matrixStart + currMatrixIndex;
+		floatAddr = matrixStart + spaceFromStart;
 		ReadProcessMemory(hProc, (BYTE*)floatAddr, &(value), sizeof(value), 0);
 
 		matrix[m] = value;
-		currMatrixIndex += 0x4;
+		spaceFromStart += 0x4;
 	}
 
 	//fovy = fovx / windowWidth * windowHeight;

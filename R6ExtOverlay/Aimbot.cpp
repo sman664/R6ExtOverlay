@@ -60,6 +60,7 @@ vec3 Aimbot::GetBestEntity()
 
 		//...find the distance from my crosshair to the target
 		float distRelCross = crossPos.Distance(screenPos);
+		
 		//float distRelXYZ = myPos.Distance(currEntPtrFeet);
 		//float ratio = 0.3 * distRelCross + 0.7 * distRelXYZ;
 
@@ -74,83 +75,7 @@ vec3 Aimbot::GetBestEntity()
 	return bestEntPos;
 
 }
-/*
-vec3 Aimbot::GetEntity()
-{
-	vec3 myPos = GetLocalPlayerPos();
-	vec3 entOfLeastDist;
 
-	uintptr_t currEntPtr;
-	float leastDist = 0;
-
-
-	// loop through entity list
-	// find the one with the least distance from me
-	// return his XYZ head pos
-	//2 problems with this: 1) it does not calculate how close he is to my crosshair 2) does not distinguish between allies and enemies
-	for (int i = 0; i < numOfPlayersDeref; i++)
-	{
-
-		//currently this only gets the first entity in the entity list
-		ReadProcessMemory(hProc, (BYTE*)entlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		//currEntPtr += 0x14;
-		for (int j = 0; j < i; j++)
-		{
-			currEntPtr += 0x4;
-		}
-
-		ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
-
-		uintptr_t XPosAddr = currEntPtr + 0x4;
-		uintptr_t YPosAddr = currEntPtr + 0x8;
-		uintptr_t ZPosAddr = currEntPtr + 0xC;
-
-		Vector3 targetHead = Vector3();
-
-		ReadProcessMemory(hProc, (BYTE*)XPosAddr, &(targetHead.x), sizeof(targetHead.x), 0);
-		ReadProcessMemory(hProc, (BYTE*)YPosAddr, &(targetHead.y), sizeof(targetHead.y), 0);
-		ReadProcessMemory(hProc, (BYTE*)ZPosAddr, &(targetHead.z), sizeof(targetHead.z), 0);
-
-		float currDist = myPos.Distance(targetHead);
-		if (i == 0 || currDist < leastDist)
-		{
-			leastDist = currDist;
-			entOfLeastDist = targetHead;
-		}
-
-	}
-
-	return entOfLeastDist;
-
-}
-*/
-/*vec3 Aimbot::GetEntity()
-{
-	uintptr_t currEntPtr;
-
-	//currently this only gets the first entity in the entity list
-	ReadProcessMemory(hProc, (BYTE*)entlist, &(currEntPtr), sizeof(currEntPtr), 0);
-	currEntPtr += 0x14;
-	//for (int j = 0; j < i; j++)
-	//{
-	//	currEntPtr += 0x4;
-	//}
-
-	ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
-
-	uintptr_t XPosAddr = currEntPtr + 0x4;
-	uintptr_t YPosAddr = currEntPtr + 0x8;
-	uintptr_t ZPosAddr = currEntPtr + 0xC;
-
-	Vector3 targetHead = Vector3();
-
-	ReadProcessMemory(hProc, (BYTE*)XPosAddr, &(targetHead.x), sizeof(targetHead.x), 0);
-	ReadProcessMemory(hProc, (BYTE*)YPosAddr, &(targetHead.y), sizeof(targetHead.y), 0);
-	ReadProcessMemory(hProc, (BYTE*)ZPosAddr, &(targetHead.z), sizeof(targetHead.z), 0);
-
-	return targetHead;
-
-}*/
 void Aimbot::AimAt()
 {
 	CameraEx cameraEx = CameraEx(hProc, moduleBase, WINDOWWIDTH, WINDOWHEIGHT);
