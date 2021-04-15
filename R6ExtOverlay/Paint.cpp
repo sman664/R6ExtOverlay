@@ -7,20 +7,12 @@ Paint::Paint(HANDLE hProc, uintptr_t moduleBase, HWND overlayHWND, HWND targetHW
 {
 	offsets = Offsets(hProc, moduleBase, width, height);
 
-	this->width1 = width;
-	this->height1 = height;
-	this->TargetHWND = targetHWND;
-	this->hProc = hProc;
-	this->moduleBase = moduleBase;
+	this->width1			= width;
+	this->height1			= height;
+	this->TargetHWND		= targetHWND;
+	this->hProc				= hProc;
+	this->moduleBase		= moduleBase;
 	init(overlayHWND);
-
-	//this->entlist = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x60 });
-	//05EF12F8
-	//this->entlist = moduleBase + 0x6ACEAB0;
-	//uintptr_t entityBasePtr = moduleBase + 0x6ACEAB0;
-	//ReadProcessMemory(hProc, (BYTE*)entityBasePtr, &(entlist), sizeof(entlist), 0);
-	//ReadProcessMemory(hProc, (BYTE*)numOfPlayers, &(numOfPlayersDeref), sizeof(numOfPlayersDeref), 0);
-
 
 }
 
@@ -95,20 +87,15 @@ int Paint::render()
 void Paint::Draw(HANDLE hProc)
 {
 
-	//uintptr_t currEntlist;
-	//ReadProcessMemory(hProc, (BYTE*)entlist, &currEntlist, sizeof(currEntlist), 0);
-	//uintptr_t currEntPoints;
-	//ReadProcessMemory(hProc, (BYTE*)currEntlist, &currEntPoints, sizeof(currEntPoints), 0);
-	//uintptr_t myEntlist = entlist;
 	uintptr_t currEntPtr = 0;
 
-	//starting from entlist offset 0x50f4f8 (or moduleBase + 10f4f8) check if entity exists then draw his/her rectangle
+	//starting from entlist offset check if entity exists then draw his/her rectangle
 	//check out ESP.cpp file in assaultcube external application I made.
 	for (int i = 0; i < offsets.numOfPlayersDeref; i++)
 	{
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
 		//ReadProcessMemory(hProc, (BYTE*)myEntlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		currEntPtr = offsets.entlist + 0x20;
+		/*currEntPtr = offsets.entlist + 0x20;
 		
 		for (int j = 0; j < i; j++)
 		{
@@ -131,6 +118,10 @@ void Paint::Draw(HANDLE hProc)
 		currEntPtrTorso = currEntPtrFeet;
 		//currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT / 2;
 		//currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT;
+		currEntPtrTorso.z = currEntPtrFeet.z - (PLAYER_HEIGHT - EYE_HEIGHT);
+		*/
+		vec3 currEntPtrFeet = offsets.GetEntityHeadPos(i);
+		vec3 currEntPtrTorso = currEntPtrFeet;
 		currEntPtrTorso.z = currEntPtrFeet.z - (PLAYER_HEIGHT - EYE_HEIGHT);
 
 		if (IsValidEnt(currEntPtrFeet))

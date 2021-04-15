@@ -4,22 +4,11 @@ Aimbot::Aimbot(HANDLE hProc, uintptr_t moduleBase, int width, int height)
 {
 	offsets = Offsets(hProc, moduleBase, width, height);
 
-	this->hProc = hProc;
-	this->moduleBase = moduleBase;
-	WINDOWWIDTH = width;
-	WINDOWHEIGHT = height;
-	//Get local player's address
-	//ReadProcessMemory(hProc, (BYTE*)localPlayer, &(localPlayerDeref), sizeof(localPlayerDeref), 0);
+	this->hProc			=	hProc;
+	this->moduleBase	=	moduleBase;
+	WINDOWWIDTH			=	width;
+	WINDOWHEIGHT		=	height;
 
-	//Get number of players
-	//ReadProcessMemory(hProc, (BYTE*)numOfPlayers, &(numOfPlayersDeref), sizeof(numOfPlayersDeref), 0);
-
-	//get pitch's address
-	//pitchAddr = localPlayerDeref + 0x44;
-	//ReadProcessMemory(hProc, (BYTE*)localPlayerDeref + 0x44, &(pitchAddr), sizeof(pitchAddr), 0);
-	//get yaw's address
-	//yawAddr = localPlayerDeref + 0x40;
-	//ReadProcessMemory(hProc, (BYTE*)localPlayerDeref + 0x40, &(yawAddr), sizeof(yawAddr), 0);
 }
 
 /*
@@ -47,63 +36,24 @@ vec3 Aimbot::GetBestEntity()
 	uintptr_t currEntPtr = 0;
 	float leastDist = 0;
 
-
-	// loop through entity list 
-	// find the one with the least distance (relative to crosshair)
-	// return his XYZ head pos
-	//problems with this: 2) does not distinguish between allies and enemies
+/*
+	 loop through entity list 
+	 find the one with the least distance (relative to crosshair)
+	 return his XYZ head pos
+	problems with this: 2) does not distinguish between allies and enemies
+*/
 	for (int i = 0; i < offsets.numOfPlayersDeref; i++)
 	{
 		CameraEx cameraEx = CameraEx(hProc, moduleBase, WINDOWWIDTH, WINDOWHEIGHT);
-		/*
-		//currently this only gets the first entity in the entity list
-		ReadProcessMemory(hProc, (BYTE*)entlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		//currEntPtr += 0x14;
-		for (int j = 0; j < i; j++)
-		{
-			currEntPtr += 0x4;
-		}
 
-		ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
-
-		uintptr_t XPosAddr = currEntPtr + 0x4;
-		uintptr_t YPosAddr = currEntPtr + 0x8;
-		uintptr_t ZPosAddr = currEntPtr + 0xC;
-
-		Vector3 targetHead = Vector3();
-
-		ReadProcessMemory(hProc, (BYTE*)XPosAddr, &(targetHead.x), sizeof(targetHead.x), 0);
-		ReadProcessMemory(hProc, (BYTE*)YPosAddr, &(targetHead.y), sizeof(targetHead.y), 0);
-		ReadProcessMemory(hProc, (BYTE*)ZPosAddr, &(targetHead.z), sizeof(targetHead.z), 0);
-		*/
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
-		//ReadProcessMemory(hProc, (BYTE*)myEntlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		currEntPtr = offsets.entlist + 0x20;
-		for (int j = 0; j < i; j++)
-		{
-			currEntPtr += 0x40;															//offset between each entity
-		}
-		ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
-
-		//get the entity's X,Y, and Z positions
-		uintptr_t thisEntPtrXPos = currEntPtr + 0x30;
-		uintptr_t thisEntPtrYPos = currEntPtr + 0x34;
-		uintptr_t thisEntPtrZPos = currEntPtr + 0x38;
-
-		Vector3 currEntPtrFeet = Vector3();
-		Vector3 currEntPtrTorso = Vector3();
-
-		ReadProcessMemory(hProc, (BYTE*)thisEntPtrXPos, &(currEntPtrFeet.x), sizeof(currEntPtrFeet.x), 0);
-		ReadProcessMemory(hProc, (BYTE*)thisEntPtrYPos, &(currEntPtrFeet.y), sizeof(currEntPtrFeet.y), 0);
-		ReadProcessMemory(hProc, (BYTE*)thisEntPtrZPos, &(currEntPtrFeet.z), sizeof(currEntPtrFeet.z), 0);
-
-		//currEntPtrTorso.z = currEntPtrFeet.z + 1.50f;
+		vec3 currEntPtrFeet = offsets.GetEntityHeadPos(i);
+		
 		//find the target's XY screen coordinates...
 		vec3 screenPos = cameraEx.WorldToScreen(currEntPtrFeet);
 
 		//... and my crosshair XY screen coordinates...
 		vec3 crossPos;
-
 		crossPos.x = (float)WINDOWWIDTH / 2;
 		crossPos.y = (float)WINDOWHEIGHT / 2;
 		crossPos.z = 0.0f;
