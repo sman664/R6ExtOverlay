@@ -22,11 +22,11 @@ const float PLAYER_HEIGHT = 5.25f;
 //const float PLAYER_HEIGHT = 4.25f;
 const float PLAYER_WIDTH = 2.0f;			
 //const float PLAYER_WIDTH = 1.75f;
-const float EYE_HEIGHT = 4.5f;
+const float EYE_HEIGHT = 4.6f;
 //const float EYE_HEIGHT = 4.0f;
 
 const float VIRTUAL_SCREEN_WIDTH = 1280; //this is the screen width you develop/test your hack with, I use same for every game
-const float GAME_UNIT_MAGIC = 200; //magic scaling number you adjust so the boxes fit the players in your game
+const float GAME_UNIT_MAGIC = 175; //magic scaling number you adjust so the boxes fit the players in your game
 const float PLAYER_ASPECT_RATIO = PLAYER_HEIGHT / PLAYER_WIDTH;
 
 
@@ -64,7 +64,7 @@ public:
 	Paint();
 	Paint(HANDLE hProc, uintptr_t moduleBase ,HWND overlayHWND, HWND targetHWND, int width, int height);
 	void Draw(HANDLE hProc);
-	bool IsValidEnt(HANDLE hProc, vec3 ent);
+	bool IsValidEnt(vec3 ent);
 
 	int render();
 };

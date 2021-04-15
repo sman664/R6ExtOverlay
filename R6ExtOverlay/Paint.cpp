@@ -58,6 +58,7 @@ void Paint::drawText(char* string, int x, int y, int a, int r, int g, int b)
 
 int Paint::render()
 {
+	offsets = Offsets(hProc, moduleBase, width1, height1);
 	//if device don't exist, don't beginscene bruh. Don't print anything holmes. DEVICE is the foundation for drawing the hacks
 	if (device == nullptr)
 		return 1;
@@ -107,10 +108,11 @@ void Paint::Draw(HANDLE hProc)
 	{
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
 		//ReadProcessMemory(hProc, (BYTE*)myEntlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		currEntPtr = offsets.entlist;
+		currEntPtr = offsets.entlist + 0x20;
+		
 		for (int j = 0; j < i; j++)
 		{
-			currEntPtr += 0x8;																	//offset between each entity
+			currEntPtr += 0x40;																	//offset between each entity
 		}
 		ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
 
@@ -128,9 +130,10 @@ void Paint::Draw(HANDLE hProc)
 
 		currEntPtrTorso = currEntPtrFeet;
 		//currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT / 2;
-		currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT;
+		//currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT;
+		currEntPtrTorso.z = currEntPtrFeet.z - (PLAYER_HEIGHT - EYE_HEIGHT);
 
-		if (IsValidEnt(hProc, currEntPtrFeet))
+		if (IsValidEnt(currEntPtrFeet))
 		{
 			CameraEx cameraEx = CameraEx(hProc, moduleBase, width1, height1);
 			Vector3 feetCoords = cameraEx.WorldToScreen(currEntPtrFeet);
@@ -172,7 +175,7 @@ void Paint::Draw(HANDLE hProc)
 	}
 }
 
-bool Paint::IsValidEnt(HANDLE hProc, vec3 ent)
+bool Paint::IsValidEnt(vec3 ent)
 {
 	if (ent.x != 0.0f)
 	{

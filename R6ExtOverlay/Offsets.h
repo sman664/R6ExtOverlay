@@ -16,10 +16,12 @@ public:
 	uintptr_t entlist = 0;
 	uintptr_t localPlayerDeref = 0;
 	int numOfPlayersDeref = 0;
+	uintptr_t matrixStart = 0;
 
 	Offsets();
 	Offsets(HANDLE hProc, uintptr_t moduleBase, int width, int height);
 	vec3 GetLocalPlayerPos();
+	//vec3 GetEntityHeadPos();
 	//vec3 GetBestEntity();
 };
 

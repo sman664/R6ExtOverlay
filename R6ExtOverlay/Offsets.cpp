@@ -11,10 +11,14 @@ Offsets::Offsets(HANDLE hProc, uintptr_t moduleBase, int width, int height)
 	this->width = width;
 	this->height = height;
 	this->moduleBase = moduleBase;
-	this->entlist = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x60 });
-	this->localPlayerDeref = FindDMAAddy(hProc, moduleBase + 0x05EF12F8, { 0x918, 0xCC8, 0x0 });
-	this->numOfPlayersDeref = 60;
 
+	//NOTE: findDMAAddy already derefences the module base
+	//this->entlist = FindDMAAddy(hProc, moduleBase + 0x05EDEE60, { 0x0, 0xA28, 0x0 });                           //Needs to be fixed
+	this->entlist = FindDMAAddy(hProc, moduleBase + 0x05EDEE60, { 0x0, 0xA28, 0x68, 0x0 });
+	this->localPlayerDeref = FindDMAAddy(hProc, moduleBase + 0x05ED29A8, { 0x918, 0xCD0, 0x0 });     //Needs to be fixed
+	this->numOfPlayersDeref = 80; 
+
+	this->matrixStart = FindDMAAddy(hProc, moduleBase + 0x05ED29A8, { 0x918, 0xCD0, 0x140 });
 }
 vec3 Offsets::GetLocalPlayerPos()
 {
@@ -31,6 +35,22 @@ vec3 Offsets::GetLocalPlayerPos()
 
 	return LPHeadPos;
 }
+/*
+vec3 Offsets::GetEntityHeadPos( vec3 )
+{
+
+	uintptr_t currHeadPosXPtr = localPlayerDeref + 0x120;
+	uintptr_t currHeadPosYPtr = localPlayerDeref + 0x124;
+	uintptr_t currHeadPosZPtr = localPlayerDeref + 0x128;
+
+	vec3 LPHeadPos = vec3();
+
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(LPHeadPos.x), sizeof(LPHeadPos.x), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(LPHeadPos.y), sizeof(LPHeadPos.y), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(LPHeadPos.z), sizeof(LPHeadPos.z), 0);
+
+	return LPHeadPos;
+}*/
 /*
 vec3 Offsets::GetBestEntity()
 {

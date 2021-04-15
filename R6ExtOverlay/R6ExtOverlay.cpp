@@ -96,7 +96,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         TranslateMessage(&msg);
         DispatchMessage(&msg);
 
-        if (GetAsyncKeyState(VK_XBUTTON2) & 1)
+        if (GetAsyncKeyState(VK_MBUTTON) & 1)
         {
             aimbotBool = !aimbotBool;
 

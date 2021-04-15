@@ -78,10 +78,10 @@ vec3 Aimbot::GetBestEntity()
 		*/
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
 		//ReadProcessMemory(hProc, (BYTE*)myEntlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		currEntPtr = offsets.entlist;
+		currEntPtr = offsets.entlist + 0x20;
 		for (int j = 0; j < i; j++)
 		{
-			currEntPtr += 0x8;															//offset between each entity
+			currEntPtr += 0x40;															//offset between each entity
 		}
 		ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
 
@@ -97,22 +97,21 @@ vec3 Aimbot::GetBestEntity()
 		ReadProcessMemory(hProc, (BYTE*)thisEntPtrYPos, &(currEntPtrFeet.y), sizeof(currEntPtrFeet.y), 0);
 		ReadProcessMemory(hProc, (BYTE*)thisEntPtrZPos, &(currEntPtrFeet.z), sizeof(currEntPtrFeet.z), 0);
 
-		currEntPtrTorso.z = currEntPtrFeet.z + 1.50f;
-		//find the target's XY screen coordinates
+		//currEntPtrTorso.z = currEntPtrFeet.z + 1.50f;
+		//find the target's XY screen coordinates...
 		vec3 screenPos = cameraEx.WorldToScreen(currEntPtrFeet);
 
-		//... and my crosshair XY screen coordinates
+		//... and my crosshair XY screen coordinates...
 		vec3 crossPos;
 
 		crossPos.x = (float)WINDOWWIDTH / 2;
 		crossPos.y = (float)WINDOWHEIGHT / 2;
 		crossPos.z = 0.0f;
 
-		//find the distance from my crosshair to the target
+		//...find the distance from my crosshair to the target
 		float distRelCross = crossPos.Distance(screenPos);
-		//float screenX = screenPos.x - crossPos.x;
-		//float screenY = screenPos.y - crossPos.y;
-		//float distRelCross = sqrtf(screenX * screenX + screenY * screenY);
+		//float distRelXYZ = myPos.Distance(currEntPtrFeet);
+		//float ratio = 0.3 * distRelCross + 0.7 * distRelXYZ;
 
 		if (i == 0 || distRelCross < leastDist)
 		{
