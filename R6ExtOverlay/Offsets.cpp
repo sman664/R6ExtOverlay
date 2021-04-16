@@ -121,3 +121,21 @@ vec3 Offsets::GetEntityGrouping2(int index)
 
 	return headPos;
 }
+
+void Offsets::initEntList()
+{
+	/*
+	1) create an array of vec3 pos for every entity's head position with a flag labeling dead or alive.
+	2) if dead, set flag to 1, else 0
+	*/
+	for (int i = 0; i < numOfPlayersDeref; i++)
+	{
+		uintptr_t currEntPtr = firstEntityAddr;
+
+		for (int j = 0; j < i; j++)
+		{
+			currEntPtr += spaceBetweenAddys;															//offset between each entity
+		}
+	}
+	
+}

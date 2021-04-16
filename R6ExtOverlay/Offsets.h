@@ -34,6 +34,7 @@ public:
 	vec3 GetEntityHeadPos(int index);
 	vec3 GetEntityGrouping(int index);
 	vec3 GetEntityGrouping2(int index);
+	void initEntList();
 
 };
 
