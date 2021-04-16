@@ -4,29 +4,12 @@ Aimbot::Aimbot(HANDLE hProc, uintptr_t moduleBase, int width, int height)
 {
 	offsets = Offsets(hProc, moduleBase, width, height);
 
-	this->hProc			=	hProc;
-	this->moduleBase	=	moduleBase;
-	WINDOWWIDTH			=	width;
-	WINDOWHEIGHT		=	height;
+	this->hProc				=	hProc;
+	this->moduleBase		=	moduleBase;
+	this->WINDOWWIDTH		=	width;
+	this->WINDOWHEIGHT		=	height;
 
 }
-
-/*
-vec3 Aimbot::GetLocalPlayerPos()
-{
-	uintptr_t currHeadPosXPtr = localPlayerDeref + 0x4;
-	uintptr_t currHeadPosYPtr = localPlayerDeref + 0x8;
-	uintptr_t currHeadPosZPtr = localPlayerDeref + 0xC;
-
-	vec3 LPHeadPos = vec3();
-
-	ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(LPHeadPos.x), sizeof(LPHeadPos.x), 0);
-	ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(LPHeadPos.y), sizeof(LPHeadPos.y), 0);
-	ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(LPHeadPos.z), sizeof(LPHeadPos.z), 0);
-
-	return LPHeadPos;
-
-}*/
 
 vec3 Aimbot::GetBestEntity()
 {
@@ -36,29 +19,29 @@ vec3 Aimbot::GetBestEntity()
 	uintptr_t currEntPtr = 0;
 	float leastDist = 0;
 
-/*
-	 loop through entity list 
-	 find the one with the least distance (relative to crosshair)
-	 return his XYZ head pos
-	problems with this: 2) does not distinguish between allies and enemies
+/* Steps:
+	 1) loop through entity list 
+	 2) find the one with the least distance (relative to crosshair)
+	 3) return his XYZ head pos
+	*** problems with this:  it does not distinguish between allies/enemies and alive/dead
 */
 	for (int i = 0; i < offsets.numOfPlayersDeref; i++)
 	{
 		CameraEx cameraEx = CameraEx(hProc, moduleBase, WINDOWWIDTH, WINDOWHEIGHT);
 
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
-		vec3 currEntPtrFeet = offsets.GetEntityHeadPos(i);
+		vec3 currEntHeadPos = offsets.GetEntityHeadPos(i);
 		
 		//find the target's XY screen coordinates...
-		vec3 screenPos = cameraEx.WorldToScreen(currEntPtrFeet);
+		vec3 screenPos = cameraEx.WorldToScreen(currEntHeadPos);
 
 		//... and my crosshair XY screen coordinates...
 		vec3 crossPos;
-		crossPos.x = (float)WINDOWWIDTH / 2;
-		crossPos.y = (float)WINDOWHEIGHT / 2;
+		crossPos.x = (float)	WINDOWWIDTH	 / 2;
+		crossPos.y = (float)	WINDOWHEIGHT / 2;
 		crossPos.z = 0.0f;
 
-		//...find the distance from my crosshair to the target
+		//...find the distance (relative to crosshair) to the target
 		float distRelCross = crossPos.Distance(screenPos);
 		
 		//float distRelXYZ = myPos.Distance(currEntPtrFeet);
@@ -66,8 +49,8 @@ vec3 Aimbot::GetBestEntity()
 
 		if (i == 0 || distRelCross < leastDist)
 		{
-			leastDist = distRelCross;
-			bestEntPos = currEntPtrFeet;
+			leastDist  = distRelCross;
+			bestEntPos = currEntHeadPos;
 		}
 
 	}
@@ -91,8 +74,8 @@ void Aimbot::AimAt()
 	INPUT Input = { 0 };
 	Input.type = INPUT_MOUSE;
 	Input.mi.dwFlags = MOUSEEVENTF_MOVE;
-	Input.mi.dx = LONG(point.x - (float)WINDOWWIDTH / 2);
-	Input.mi.dy = LONG(point.y - (float)WINDOWHEIGHT / 2);
+	Input.mi.dx = LONG	(point.x - (float)	WINDOWWIDTH  / 2);
+	Input.mi.dy = LONG	(point.y - (float)	WINDOWHEIGHT / 2);
 	SendInput(1, &Input, sizeof(INPUT));
 }
 /*

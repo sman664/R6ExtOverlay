@@ -22,6 +22,7 @@ CameraEx::CameraEx(HANDLE hProc, uintptr_t moduleBase, int windowWidth, int wind
 	{
 		value = 0;
 		floatAddr = 0;
+
 		floatAddr = matrixStart + spaceFromStart;
 		ReadProcessMemory(hProc, (BYTE*)floatAddr, &(value), sizeof(value), 0);
 
@@ -38,23 +39,25 @@ vec3 CameraEx::WorldToScreen(vec3 pos)
 	vec3 screen;
 	Vec4 clipCoords;
 
-	//directx version
-	//clipCoords.x = pos.x * matrix[0] + pos.y * matrix[1] + pos.z * matrix[2] + matrix[3];
-	//clipCoords.y = pos.x * matrix[4] + pos.y * matrix[5] + pos.z * matrix[6] + matrix[7];
-	//clipCoords.z = pos.x * matrix[8] + pos.y * matrix[9] + pos.z * matrix[10] + matrix[11];
-	//clipCoords.w = pos.x * matrix[12] + pos.y * matrix[13] + pos.z * matrix[14] + matrix[15];
+	/*
+	directx version
+	clipCoords.x = pos.x * matrix[0] + pos.y * matrix[1] + pos.z * matrix[2] + matrix[3];
+	clipCoords.y = pos.x * matrix[4] + pos.y * matrix[5] + pos.z * matrix[6] + matrix[7];
+	clipCoords.z = pos.x * matrix[8] + pos.y * matrix[9] + pos.z * matrix[10] + matrix[11];
+	clipCoords.w = pos.x * matrix[12] + pos.y * matrix[13] + pos.z * matrix[14] + matrix[15];
 
-	//reversed directx
-	//clipCoords.x = pos.x * matrix[15] + pos.y * matrix[14] + pos.z * matrix[13] + matrix[12];
-	//clipCoords.y = pos.x * matrix[11] + pos.y * matrix[10] + pos.z * matrix[9] + matrix[8];
-	//clipCoords.z = pos.x * matrix[7] + pos.y * matrix[6] + pos.z * matrix[5] + matrix[4];
-	//clipCoords.w = pos.x * matrix[3] + pos.y * matrix[2] + pos.z * matrix[1] + matrix[0];
+	reversed directx
+	clipCoords.x = pos.x * matrix[15] + pos.y * matrix[14] + pos.z * matrix[13] + matrix[12];
+	clipCoords.y = pos.x * matrix[11] + pos.y * matrix[10] + pos.z * matrix[9] + matrix[8];
+	clipCoords.z = pos.x * matrix[7] + pos.y * matrix[6] + pos.z * matrix[5] + matrix[4];
+	clipCoords.w = pos.x * matrix[3] + pos.y * matrix[2] + pos.z * matrix[1] + matrix[0];
 
-	//reversed opengl
-	//clipCoords.x = pos.x * matrix[15] + pos.y * matrix[11] + pos.z * matrix[7] + matrix[3];
-	//clipCoords.y = pos.x * matrix[14] + pos.y * matrix[10] + pos.z * matrix[6] + matrix[2];
-	//clipCoords.z = pos.x * matrix[13] + pos.y * matrix[9] + pos.z * matrix[5] + matrix[1];
-	//clipCoords.w = pos.x * matrix[12] + pos.y * matrix[8] + pos.z * matrix[4] + matrix[0];
+	reversed opengl
+	clipCoords.x = pos.x * matrix[15] + pos.y * matrix[11] + pos.z * matrix[7] + matrix[3];
+	clipCoords.y = pos.x * matrix[14] + pos.y * matrix[10] + pos.z * matrix[6] + matrix[2];
+	clipCoords.z = pos.x * matrix[13] + pos.y * matrix[9] + pos.z * matrix[5] + matrix[1];
+	clipCoords.w = pos.x * matrix[12] + pos.y * matrix[8] + pos.z * matrix[4] + matrix[0];
+	*/
 
 	//opengl version
 	clipCoords.x = pos.x * matrix[0] + pos.y * matrix[4] + pos.z * matrix[8] + matrix[12];
