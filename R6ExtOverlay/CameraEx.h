@@ -10,14 +10,14 @@
 class CameraEx
 {
 public:
-	HANDLE hProc		=	0;
-	int windowWidth		=	0, 
-		windowHeight	=	0;
-	float matrix		 [16];
-	Offsets offsets;
+	HANDLE		hProc			=	0;
+	int			windowWidth		=	0, 
+				windowHeight	=	0;
+	float		matrix			 [16];
+	Offsets		offsets;
 
-	uintptr_t moduleBase   =	0;
-	uintptr_t matrixStart  =	0;
+	uintptr_t	moduleBase		=	0;
+	uintptr_t	matrixStart		=	0;
 
 	CameraEx(HANDLE hProc, uintptr_t moduleBase, int windowWidth, int windowHeight);
 

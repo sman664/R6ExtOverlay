@@ -58,10 +58,13 @@ private:
 	void drawText(char* string, int x, int y, int a, int r, int g, int b);
 	void drawFilledRectangle(float x, float y, float width, float height, D3DCOLOR color);
 	void drawRectangle(float x, float y, float width, float height, D3DCOLOR color);
+	void drawLine(float x, float y, float x1, float yy1, D3DCOLOR color);
+	void drawTriangle(float x, float y, float x1, float yy1, float x2, float yy2, D3DCOLOR color);
 	
 public:
 	Paint();
 	Paint(HANDLE hProc, uintptr_t moduleBase ,HWND overlayHWND, HWND targetHWND, int width, int height);
+
 	void Draw(HANDLE hProc);
 	bool IsValidEnt(vec3 ent);
 

@@ -23,6 +23,9 @@ Offsets::Offsets(HANDLE hProc, uintptr_t moduleBase, int width, int height)
 	this->firstEntityAddr	=	entlist + 0x20;
 	this->spaceBetweenAddys	=	0x40;
 	this->XposAddr			=	0x30;
+
+	this->XposAddr2			=	0x40;
+	this->XposAddr3			=	0x50;
 }
 vec3 Offsets::GetLocalPlayerPos()
 {
@@ -44,6 +47,7 @@ vec3 Offsets::GetEntityHeadPos(int index)
 
 	uintptr_t currEntPtr = firstEntityAddr;
 
+	//loop to find the current entity
 	for (int j = 0; j < index; j++)
 	{
 		currEntPtr += spaceBetweenAddys;															//offset between each entity
@@ -51,16 +55,69 @@ vec3 Offsets::GetEntityHeadPos(int index)
 	ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
 
 	//get the entity's X,Y, and Z positions
-	uintptr_t thisEntPtrXPos = currEntPtr +	XposAddr;
-	uintptr_t thisEntPtrYPos = currEntPtr +	XposAddr + 0x4;
-	uintptr_t thisEntPtrZPos = currEntPtr +	XposAddr + 0x8;
+	uintptr_t currHeadPosXPtr = currEntPtr	+	XposAddr;
+	uintptr_t currHeadPosYPtr = currEntPtr	+	XposAddr + 0x4;
+	uintptr_t currHeadPosZPtr = currEntPtr	+	XposAddr + 0x8;
 
 	Vector3 headPos;
 
-	ReadProcessMemory(hProc, (BYTE*)thisEntPtrXPos, &(headPos.x), sizeof(headPos.x), 0);
-	ReadProcessMemory(hProc, (BYTE*)thisEntPtrYPos, &(headPos.y), sizeof(headPos.y), 0);
-	ReadProcessMemory(hProc, (BYTE*)thisEntPtrZPos, &(headPos.z), sizeof(headPos.z), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(headPos.x), sizeof(headPos.x), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(headPos.y), sizeof(headPos.y), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(headPos.z), sizeof(headPos.z), 0);
 	
 	return headPos;
 }
 
+vec3 Offsets::GetEntityGrouping(int index)
+{
+
+	uintptr_t currEntPtr = firstEntityAddr;
+	
+	//loop to find the current entity
+	for (int j = 0; j < index; j++)
+	{
+		currEntPtr += spaceBetweenAddys;															//offset between each entity
+	}
+
+	ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
+
+	//get the entity's X,Y, and Z positions
+	uintptr_t currHeadPosXPtr = currEntPtr + XposAddr2;
+	uintptr_t currHeadPosYPtr = currEntPtr + XposAddr2 + 0x4;
+	uintptr_t currHeadPosZPtr = currEntPtr + XposAddr2 + 0x8;
+
+	Vector3 headPos;
+
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(headPos.x), sizeof(headPos.x), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(headPos.y), sizeof(headPos.y), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(headPos.z), sizeof(headPos.z), 0);
+
+	return headPos;
+}
+
+vec3 Offsets::GetEntityGrouping2(int index)
+{
+
+	uintptr_t currEntPtr = firstEntityAddr;
+
+	//loop to find the current entity
+	for (int j = 0; j < index; j++)
+	{
+		currEntPtr += spaceBetweenAddys;															//offset between each entity
+	}
+
+	ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
+
+	//get the entity's X,Y, and Z positions
+	uintptr_t currHeadPosXPtr = currEntPtr + XposAddr3;
+	uintptr_t currHeadPosYPtr = currEntPtr + XposAddr3 + 0x4;
+	uintptr_t currHeadPosZPtr = currEntPtr + XposAddr3 + 0x8;
+
+	Vector3 headPos;
+
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosXPtr, &(headPos.x), sizeof(headPos.x), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosYPtr, &(headPos.y), sizeof(headPos.y), 0);
+	ReadProcessMemory(hProc, (BYTE*)currHeadPosZPtr, &(headPos.z), sizeof(headPos.z), 0);
+
+	return headPos;
+}

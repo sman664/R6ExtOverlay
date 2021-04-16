@@ -51,15 +51,19 @@ void Paint::drawText(char* string, int x, int y, int a, int r, int g, int b)
 int Paint::render()
 {
 	offsets = Offsets(hProc, moduleBase, width1, height1);
+	
 	//if device don't exist, don't beginscene bruh. Don't print anything holmes. DEVICE is the foundation for drawing the hacks
 	if (device == nullptr)
 		return 1;
 	device->Clear(0, 0, D3DCLEAR_TARGET, 0, 1.0f, 0);
 	device->BeginScene();
 
-	//yellow (255,255,0)
-	//red (255, 0, 0)
-	//first argument is a number 0-255. (255 is full opacity. 0 is full transparency)
+/*
+	first argument is a number 0-255. (255 is full opacity. 0 is full transparency)
+	last three are RGB format:
+		yellow	(255,255,0)
+		red		(255, 0, 0)
+*/
 	D3DCOLOR boxColor = D3DCOLOR_ARGB(255, 255, 255, 0); //yellow
 
 	//anything you want drawn on screen, put in here
@@ -90,38 +94,16 @@ void Paint::Draw(HANDLE hProc)
 	uintptr_t currEntPtr = 0;
 
 	//starting from entlist offset check if entity exists then draw his/her rectangle
-	//check out ESP.cpp file in assaultcube external application I made.
 	for (int i = 0; i < offsets.numOfPlayersDeref; i++)
 	{
 		//start at the beginning of entity list, then loop till you get the next enemy/entity
 		//ReadProcessMemory(hProc, (BYTE*)myEntlist, &(currEntPtr), sizeof(currEntPtr), 0);
-		/*currEntPtr = offsets.entlist + 0x20;
 		
-		for (int j = 0; j < i; j++)
-		{
-			currEntPtr += 0x40;																	//offset between each entity
-		}
-		ReadProcessMemory(hProc, (BYTE*)currEntPtr, &(currEntPtr), sizeof(currEntPtr), 0);
-
-		//get the entity's X,Y, and Z positions
-		uintptr_t thisEntPtrXPos = currEntPtr + 0x30;
-		uintptr_t thisEntPtrYPos = currEntPtr + 0x34;
-		uintptr_t thisEntPtrZPos = currEntPtr + 0x38;
-
-		Vector3 currEntPtrFeet = Vector3();
-		Vector3 currEntPtrTorso = Vector3();
-
-		ReadProcessMemory(hProc, (BYTE*)thisEntPtrXPos, &(currEntPtrFeet.x), sizeof(currEntPtrFeet.x), 0);
-		ReadProcessMemory(hProc, (BYTE*)thisEntPtrYPos, &(currEntPtrFeet.y), sizeof(currEntPtrFeet.y), 0);
-		ReadProcessMemory(hProc, (BYTE*)thisEntPtrZPos, &(currEntPtrFeet.z), sizeof(currEntPtrFeet.z), 0);
-
-		currEntPtrTorso = currEntPtrFeet;
-		//currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT / 2;
-		//currEntPtrTorso.z = currEntPtrFeet.z - EYE_HEIGHT + PLAYER_HEIGHT;
-		currEntPtrTorso.z = currEntPtrFeet.z - (PLAYER_HEIGHT - EYE_HEIGHT);
-		*/
 		vec3 currEntPtrFeet = offsets.GetEntityHeadPos(i);
 		vec3 currEntPtrTorso = currEntPtrFeet;
+
+		//vec3 currEntSecondCoord = offsets.GetEntityGrouping(i);
+		//vec3 currEntThirdCoord = offsets.GetEntityGrouping2(i);
 		currEntPtrTorso.z = currEntPtrFeet.z - (PLAYER_HEIGHT - EYE_HEIGHT);
 
 		if (IsValidEnt(currEntPtrFeet))
@@ -132,14 +114,26 @@ void Paint::Draw(HANDLE hProc)
 			if (feetCoords.z < 100)
 			{
 				//get the screen coordinates of this enemy's torso (stored in x, y) and normalized distance (stored in torsoCoords.z)
-				Vector3 torsoCoords = cameraEx.WorldToScreen(currEntPtrTorso);
-
-				float scale = (GAME_UNIT_MAGIC / torsoCoords.z) * (cameraEx.windowWidth / VIRTUAL_SCREEN_WIDTH);
-				float x = torsoCoords.x - scale;
-				float y = torsoCoords.y - scale * PLAYER_ASPECT_RATIO;
-				float width = scale * 2;
+				vec3 torsoCoords = cameraEx.WorldToScreen(currEntPtrTorso);
+				/*
+				vec3 secondCoord = cameraEx.WorldToScreen(currEntSecondCoord);
+				vec3 thirdCoord = cameraEx.WorldToScreen(currEntThirdCoord);
+				float x = torsoCoords.x;
+				float y = torsoCoords.y;
+				float x1 = secondCoord.x;
+				float yy1 = secondCoord.y;
+				float x2 = thirdCoord.x;
+				float yy2 = thirdCoord.y;
+				*/
+				float scale  = (GAME_UNIT_MAGIC / torsoCoords.z) * (cameraEx.windowWidth / VIRTUAL_SCREEN_WIDTH);
+				float x		 = torsoCoords.x - scale;
+				float y		 = torsoCoords.y - scale * PLAYER_ASPECT_RATIO;
+				float width	 = scale * 2;
 				float height = scale * PLAYER_ASPECT_RATIO * 2;
 
+				//float x1	 = secondCoord.x - scale;
+				//float yy1	 = secondCoord.y - scale * PLAYER_ASPECT_RATIO;
+				
 				//GL::DrawOutline(x, y, width, height, 2.0f);
 				/*
 				Vector3 torsoCoords = cameraEx.WorldToScreen(currEntPtrTorso);
@@ -158,9 +152,8 @@ void Paint::Draw(HANDLE hProc)
 				
 				D3DCOLOR boxColor = D3DCOLOR_ARGB(255, 255, 255, 0); //yellow
 				drawRectangle(x, y, width, height, boxColor);
-				
-				//drawRectangle(feetCoords.x - widthEntity - 120, torsoCoords.y - heightEntity - 150, widthEntity, heightEntity, boxColor);
-				//drawRectangle(feetCoords.x - widthEntity / 2, torsoCoords.y - heightEntity / 2, widthEntity, heightEntity, boxColor);
+				//drawLine(x, y, x1, yy1, boxColor);
+				//drawTriangle(x, y, x1, yy1, x2, yy2, boxColor);
 			}
 		}
 	}
@@ -187,7 +180,8 @@ bool Paint::IsValidEnt(vec3 ent)
 	return false;
 }
 
-void Paint::drawFilledRectangle(float x, float y, float width, float height, D3DCOLOR color) {
+void Paint::drawFilledRectangle(float x, float y, float width, float height, D3DCOLOR color) 
+{
 	D3DXVECTOR2 vertices[2] = { D3DXVECTOR2(x + width / 2, y),D3DXVECTOR2(x + width / 2, y + height) };
 	if (!line)
 		D3DXCreateLine(device, &line);
@@ -195,7 +189,8 @@ void Paint::drawFilledRectangle(float x, float y, float width, float height, D3D
 	line->Draw(vertices, 2, color);
 }
 
-void Paint::drawRectangle(float x, float y, float width, float height, D3DCOLOR color) {
+void Paint::drawRectangle(float x, float y, float width, float height, D3DCOLOR color) 
+{
 	D3DXVECTOR2 rect[5];
 	rect[0] = D3DXVECTOR2(x, y);
 	rect[1] = D3DXVECTOR2(x + width, y);
@@ -209,6 +204,33 @@ void Paint::drawRectangle(float x, float y, float width, float height, D3DCOLOR 
 	line->Draw(rect, 5, color);
 }
 
+void Paint::drawLine(float x, float y, float x1, float yy1, D3DCOLOR color)
+{
+	D3DXVECTOR2 rect[2];
+	rect[0] = D3DXVECTOR2(x, y);
+	rect[1] = D3DXVECTOR2(x1, yy1);
+
+	if (!line) {
+		D3DXCreateLine(device, &line);
+	}
+	line->SetWidth(1);
+	line->Draw(rect, 2, color);
+}
+
+void Paint::drawTriangle(float x, float y, float x1, float yy1, float x2, float yy2, D3DCOLOR color)
+{
+	D3DXVECTOR2 rect[4];
+	rect[0] = D3DXVECTOR2(x, y);
+	rect[1] = D3DXVECTOR2(x1, yy1);
+	rect[2] = D3DXVECTOR2(x2, yy2);
+	rect[3] = D3DXVECTOR2(x, y);
+
+	if (!line) {
+		D3DXCreateLine(device, &line);
+	}
+	line->SetWidth(1);
+	line->Draw(rect, 4, color);
+}
 //void Paint::Rect(int x, int y, int l, int h, D3DCOLOR color)
 //{
 //	D3DRECT rect = { x, y, x + l, y + h };

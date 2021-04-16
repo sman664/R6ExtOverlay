@@ -21,6 +21,9 @@ public:
 	uintptr_t	firstEntityAddr		=	0;
 	uintptr_t	spaceBetweenAddys	=	0;
 	uintptr_t	XposAddr			=	0;
+	uintptr_t	XposAddr2			=   0;
+	uintptr_t	XposAddr3			=	0;
+
 
 	//constructors for initializing all the goodies above
 	Offsets();
@@ -29,6 +32,8 @@ public:
 	//functions for modulization
 	vec3 GetLocalPlayerPos();
 	vec3 GetEntityHeadPos(int index);
+	vec3 GetEntityGrouping(int index);
+	vec3 GetEntityGrouping2(int index);
 
 };
 
