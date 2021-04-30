@@ -21,7 +21,7 @@ vec3 Aimbot::GetBestEntity()
 
 /* Steps:
 	 1) loop through entity list 
-	 2) find the one with the least distance (relative to crosshair)
+	 2) find the one with the least distance (relative to crosshair or center of screen really)
 	 3) return his XYZ head pos
 	*** problems with this:  it does not distinguish between allies/enemies and alive/dead
 */
@@ -35,19 +35,19 @@ vec3 Aimbot::GetBestEntity()
 		//find the target's XY screen coordinates...
 		vec3 screenPos = cameraEx.WorldToScreen(currEntHeadPos);
 
-		//... and my crosshair XY screen coordinates...
+		//... and my crosshair XY screen coordinates (a.k.a. center of window)...
 		vec3 crossPos;
 		crossPos.x = (float)	WINDOWWIDTH	 / 2;
 		crossPos.y = (float)	WINDOWHEIGHT / 2;
 		crossPos.z = 0.0f;
 
-		//...find the distance (relative to crosshair) to the target
+		//...find the distance (relative to crosshair or CoW) to the target
 		float distRelCross = crossPos.Distance(screenPos);
 		
 		//float distRelXYZ = myPos.Distance(currEntPtrFeet);
 		//float ratio = 0.3 * distRelCross + 0.7 * distRelXYZ;
 
-		if (i == 0 || distRelCross < leastDist)
+		if (i == 0 || distRelCross < leastDist && currEntHeadPos.x != 0)
 		{
 			leastDist  = distRelCross;
 			bestEntPos = currEntHeadPos;

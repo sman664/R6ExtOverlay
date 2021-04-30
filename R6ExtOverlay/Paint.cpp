@@ -152,8 +152,7 @@ void Paint::Draw(HANDLE hProc)
 				
 				D3DCOLOR boxColor = D3DCOLOR_ARGB(255, 255, 255, 0); //yellow
 				drawRectangle(x, y, width, height, boxColor);
-				//drawLine(x, y, x1, yy1, boxColor);
-				//drawTriangle(x, y, x1, yy1, x2, yy2, boxColor);
+
 			}
 		}
 	}

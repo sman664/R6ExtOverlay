@@ -30,7 +30,6 @@ CameraEx::CameraEx(HANDLE hProc, uintptr_t moduleBase, int windowWidth, int wind
 		spaceFromStart += 0x4;
 	}
 
-	//fovy = fovx / windowWidth * windowHeight;
 }
 
 vec3 CameraEx::WorldToScreen(vec3 pos)
@@ -65,7 +64,7 @@ vec3 CameraEx::WorldToScreen(vec3 pos)
 	clipCoords.z = pos.x * matrix[2] + pos.y * matrix[6] + pos.z * matrix[10] + matrix[14];
 	clipCoords.w = pos.x * matrix[3] + pos.y * matrix[7] + pos.z * matrix[11] + matrix[15];
 
-	if (clipCoords.w < 1.6f)
+	if (clipCoords.w < 0.1f)
 	{
 		screen = { 0, 0, 0 };
 		return screen;

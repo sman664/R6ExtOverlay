@@ -29,9 +29,6 @@ const float GAME_UNIT_MAGIC = 175; //magic scaling number you adjust so the boxe
 const float PLAYER_ASPECT_RATIO = PLAYER_HEIGHT / PLAYER_WIDTH;
 
 
-//const uintptr_t numOfPlayers = 0x50f500;
-//const int numOfPlayers = 17;
-
 class Paint
 {
 private:

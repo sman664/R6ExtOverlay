@@ -4,6 +4,7 @@
 #include "proc.h"
 #include <d3dx9math.h>
 
+
 class Offsets
 {
 public:
@@ -38,3 +39,13 @@ public:
 
 };
 
+//struct Vec3WBool
+//{
+//	vec3 vec;
+//	bool flag = true;
+//};
+//static struct EntityList
+//{
+//	static const int arrSize = 1000;
+//	Vec3WBool entListArr[arrSize];
+//};

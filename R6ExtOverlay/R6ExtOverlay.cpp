@@ -14,6 +14,7 @@
 #include "CameraEx.h"
 #include "geom.h"
 #include "Aimbot.h"
+#include "Offsets.h"
 
 // Global Variables:
 HINSTANCE hInst;                                // current instance
@@ -86,6 +87,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         return FALSE;
     }
+    //Offsets offsets = Offsets(hProcess, moduleBase, width, height);
+    //offsets.initEntList();
     paint = Paint(hProcess, moduleBase, overlayHWND, targetHWND, width, height);
     bool aimbotBool = false;
     MSG msg;
