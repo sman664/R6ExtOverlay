@@ -18,6 +18,7 @@ vec3 Aimbot::GetBestEntity()
 
 	uintptr_t currEntPtr = 0;
 	float leastDist = 0;
+	int count = 0;
 
 /* Steps:
 	 1) loop through entity list 
@@ -44,14 +45,27 @@ vec3 Aimbot::GetBestEntity()
 		//...find the distance (relative to crosshair or CoW) to the target
 		float distRelCross = crossPos.Distance(screenPos);
 		
-		//float distRelXYZ = myPos.Distance(currEntPtrFeet);
-		//float ratio = 0.3 * distRelCross + 0.7 * distRelXYZ;
-
-		if (i == 0 || distRelCross < leastDist && currEntHeadPos.x != 0)
+		//here we set the global target w/ least distance from localplayer. (We will omit any NaNs i.e. null values to avoid breaking our aimbot)
+		if (distRelCross > 0)
 		{
-			leastDist  = distRelCross;
-			bestEntPos = currEntHeadPos;
+			count++;
+			bool firstEntity = false;
+			
+			if (count == 1)
+			{
+				firstEntity = true;
+			}
+			if (firstEntity == true || distRelCross < leastDist)
+			{
+				if (currEntHeadPos.x != 0 && currEntHeadPos.x != myPos.x)
+				{
+					leastDist = distRelCross;
+					bestEntPos = currEntHeadPos;
+				}
+
+			}
 		}
+
 
 	}
 
