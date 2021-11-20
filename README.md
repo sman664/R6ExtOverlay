@@ -1,5 +1,7 @@
-# Rainbow Six Siege ESP and AIMBOT hack (operates External to the game)
+# Rainbow Six Siege ESP and AIMBOT hack 
+(operates External to the game)
 Fully functioning External ESP for Rainbow Six Siege (no bypass)
+Special thanks to GuidedHacking YT, CheatTheGame YT, and CasualGamer
 
 Steps to use:
 1. Download/clone on Git Bash or Windows 10
