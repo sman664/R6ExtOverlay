@@ -8,3 +8,6 @@ Steps to use:
 
 ## Proof of Concept 
 ![](esp_demo.gif)
+
+Full demo video can be found on my YT channel here:
+https://www.youtube.com/watch?v=3uOrQQYhhBE
