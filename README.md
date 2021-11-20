@@ -1,4 +1,4 @@
-# R6ExtOverlay
+# Rainbow Six Siege ESP and AIMBOT hack (operates External to the game)
 Fully functioning External ESP for Rainbow Six Siege (no bypass)
 
 Steps to use:
