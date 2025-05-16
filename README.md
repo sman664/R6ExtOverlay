@@ -6,7 +6,7 @@ Special thanks to GuidedHacking YT, CheatTheGame YT, and CasualGamer
 Steps to use:
 1. Download/clone on Git Bash or Windows 10
 2. Open Rainbow Six Siege game
-3. Build and run
+3. Build and run (preferably with Visual Studio)
 
 ## Proof of Concept 
 ![](esp_demo.gif)
