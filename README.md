@@ -1,6 +1,6 @@
 This code is now old and broken, but the right person can fix it by:
 - finding the new offsets for the entity list, World2Screen, Player XYZ coordinates
-- replacing these offsets wiht the new ones in the code 
+- replacing these offsets with the new ones in the code 
 
 # Rainbow Six Siege ESP and AIMBOT hack 
 (operates External to the game)  
